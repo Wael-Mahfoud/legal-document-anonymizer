@@ -45,34 +45,8 @@ User Interface| Streamlit
 Containerization| Docker & Docker Compose
 Testing| pytest
 
-## System Architecture
-
-The following diagram illustrates the overall architecture and
-processing workflow of the Legal Document Anonymizer, from
-document upload and entity detection to anonymization and
-document reconstruction.
-
-flowchart TD
-    A["User"] --> B["Streamlit Web Interface"]
-    B --> C["File Validation"]
-    C --> D["Document Loader"]
-    D --> E{"File Type"}
-    E -->|TXT| F["TXT Extractor"]
-    E -->|DOCX| G["DOCX Extractor"]
-    F --> H["Text Normalization & Chunking"]
-    G --> H
-    H --> I["Entity Detection"]
-    I --> J["NuNER Zero / GLiNER"]
-    I --> K["Regex Pattern Detector"]
-    J --> L["Entity Resolver"]
-    K --> L
-    L --> M["Replacement Policy"]
-    M --> N["Document Reconstruction"]
-    N --> O["Output Validation"]
-    O --> P["Download Anonymized Document"]
 
 Anonymization Strategies
-
 The application supports different replacement strategies depending on the required anonymization policy:
 
 Strategy| Description
