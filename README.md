@@ -6,6 +6,10 @@ Legal Document Anonymizer is a Python-based application designed to detect and a
 
 The application provides configurable anonymization policies and reconstructs processed documents while preserving standard DOCX formatting.
 
+## System Architecture
+
+![System Architecture](docs/images/architecture.png)
+
 ## Screenshots
 
 ### Application Interface
@@ -17,9 +21,7 @@ The application provides configurable anonymization policies and reconstructs pr
 ### Detection Settings
 ![Detection Settings](docs/images/original-document.png)
 
-## System Architecture
 
-![System Architecture](docs/images/architecture.png)
 Key Features
 
 - Document Support: Upload and process TXT and DOCX files, with a 20 MiB file-size limit.
