@@ -1,68 +1,193 @@
-# Legal Document Anonymizer
+Legal Document Anonymizer
 
-A first implementation of the Text Obfuscation assignment. It accepts `.txt` and `.docx`, detects selected sensitive entities, replaces them, and returns an anonymized file. The initial domain is English legal documents.
+A privacy-focused document anonymization tool built with Python, NuNER Zero, GLiNER, and Streamlit.
 
-## What works in this version
+Legal Document Anonymizer is a Python-based application designed to detect and anonymize sensitive information in English legal documents. It supports TXT and DOCX files, combining machine-learning-based Named Entity Recognition (NER) with rule-based pattern detection.
 
-- TXT and DOCX input (20 MiB limit).
-- NuNER Zero / GLiNER for `PER`, `ORG`, and `LOC` (loaded lazily when those categories are selected).
-- Local pattern rules for `EMAIL`, `PHONE`, `DATE`, and `ID`.
-- Overlap resolution and offset-aware replacement.
-- Replacement policies: typed redaction, generic mask, entity type, consistent pseudonyms, and block-character blackout.
-- TXT output and DOCX reconstruction. DOCX paragraphs, tables, headers, footers, and standard run formatting are handled by replacing run text instead of assigning `paragraph.text`.
-- Streamlit interface and Docker Compose setup.
+The application provides configurable anonymization policies and reconstructs processed documents while preserving standard DOCX formatting.
 
-## Important limitations
+Key Features
 
-This is a coursework prototype, not a guarantee of complete legal or privacy redaction. Model predictions and regular expressions can miss sensitive data or produce false positives. Review each output before sharing it. In DOCX files, content stored in text boxes, hyperlink XML not surfaced as ordinary runs, tracked changes, embedded objects, comments, and unusual field structures are not yet comprehensively handled. PDF and OCR are intentionally postponed.
+- Document Support: Upload and process TXT and DOCX files, with a 20 MiB file-size limit.
+- Named Entity Recognition: NuNER Zero / GLiNER detects Person (PER), Organization (ORG), and Location (LOC) entities.
+- Rule-Based Detection: Regular expressions identify Email, Phone, Date, and ID patterns.
+- Overlap Resolution: Resolves overlapping entity spans before applying replacements.
+- Multiple Anonymization Policies:
+  - Typed redaction
+  - Generic masking
+  - Entity-type replacement
+  - Consistent pseudonym generation
+  - Block-character blackout
+- Document Reconstruction: Generates anonymized TXT and DOCX files. DOCX processing supports paragraphs, tables, headers, footers, and standard run formatting.
+- Streamlit Interface: Provides a straightforward interface for uploading, processing, and downloading documents.
+- Docker Support: Includes Dockerfile and Docker Compose configuration for containerized deployment.
 
-## Run locally
+Technology Stack
 
-Use Python 3.11 in a virtual environment:
+Component| Technology
+Programming Language| Python 3.11
+NER Model| NuNER Zero
+NER Framework| GLiNER
+Pattern Detection| Regular Expressions
+Document Processing| python-docx
+User Interface| Streamlit
+Containerization| Docker & Docker Compose
+Testing| pytest
 
-```bash
+System Architecture
+
+The application follows a modular processing pipeline:
+
+Document Upload
+      |
+      v
+Input Validation
+      |
+      v
+Text Extraction
+      |
+      v
+Text Chunking with Offsets
+      |
+      +----------------------+
+      |                      |
+      v                      v
+NuNER Zero / GLiNER     Regex Detection
+PER / ORG / LOC         EMAIL / PHONE
+                        DATE / ID
+      |                      |
+      +----------+-----------+
+                 |
+                 v
+       Overlapping Span Resolution
+                 |
+                 v
+       Anonymization Policy
+                 |
+                 v
+       Document Reconstruction
+                 |
+                 v
+          Output Validation
+                 |
+                 v
+       Anonymized Document
+
+Anonymization Strategies
+
+The application supports different replacement strategies depending on the required anonymization policy:
+
+Strategy| Description
+Typed Redaction| Replaces sensitive content with a descriptive redaction marker.
+Generic Mask| Replaces detected values with a generic mask.
+Entity Type| Uses the detected entity category as the replacement.
+Consistent Pseudonyms| Assigns consistent fake values to repeated entities.
+Blackout| Replaces sensitive content with block characters.
+
+Getting Started
+
+Prerequisites
+
+- Python 3.11 for local installation.
+- Docker and Docker Compose for containerized execution.
+- Sufficient disk space and RAM for loading the NuNER Zero model.
+
+Run Locally
+
+Create and activate a virtual environment:
+
 python -m venv .venv
-# Windows PowerShell:
+
+Windows PowerShell:
+
 .\.venv\Scripts\Activate.ps1
-# macOS/Linux:
-# source .venv/bin/activate
+
+macOS / Linux:
+
+source .venv/bin/activate
+
+Install dependencies:
+
 python -m pip install --upgrade pip
 pip install -r requirements.txt
+
+Start the application:
+
 streamlit run app/main.py
-```
 
-On the first run with `PER`, `ORG`, or `LOC` enabled, NuNER Zero will be downloaded from Hugging Face and cached locally. This model is relatively large; allow sufficient disk space and RAM. The uploaded document is processed locally by the app; model download is the only expected network operation for inference setup.
+On the first run, when PER, ORG, or LOC detection is enabled, NuNER Zero may need to be downloaded from Hugging Face. The model is cached locally for subsequent runs.
 
-## Run with Docker
+Run with Docker
 
-```bash
+Build and start the application:
+
 docker compose up --build
-```
 
-Open <http://localhost:8501>. The Hugging Face model cache is stored in a Docker volume so it is not downloaded on every container recreation.
+Open the application at:
 
-## Run tests
+http://localhost:8501
 
-```bash
+The Hugging Face model cache is stored in a Docker volume to avoid downloading the model again whenever the container is recreated.
+
+Testing
+
+Run the automated test suite:
+
 pytest -q
-```
 
-The unit tests do not load the ML model. They verify pattern detection, offset use, replacement, and consistent pseudonyms.
+The current unit tests cover:
+- Pattern detection.
+- Entity span and offset handling.
+- Overlapping entity resolution.
+- Replacement policies.
+- Consistent pseudonym generation.
+- Document reconstruction.
 
-## Pipeline
+The unit tests do not load the machine learning model or constitute a complete evaluation of NER accuracy.
 
-```text
-Upload → Validate → Extract → Chunk with offsets
-      ├─ NuNER Zero: PER / ORG / LOC
-      └─ Regex rules: EMAIL / PHONE / DATE / ID
-      → Resolve overlapping spans → Apply replacement policy
-      → Rebuild TXT or DOCX → Validate output → Download
-```
+Security and Privacy Considerations
 
-## Next milestones
+This project is designed to process documents locally when running in a local or self-hosted environment.
 
-1. Add an annotated legal-document evaluation set and benchmark NER precision/recall/F1.
-2. Compare NuNER Zero with a compact pre-trained BERT NER baseline.
-3. Improve DOCX support for hyperlinks, text boxes, and more complex Word structures.
-4. Add PDF text extraction as the optional next input format.
-5. Add a short report with measured results, not estimated performance.
+Important considerations:
+
+- Model downloads require an internet connection during initial setup unless the model is already cached.
+- Uploaded documents should be handled securely.
+- Anonymized outputs must be reviewed before being shared.
+- The application does not guarantee complete removal of all sensitive information.
+
+Do not use this coursework prototype as the sole protection mechanism for confidential legal or personal documents.
+
+Current Limitations
+
+This is an initial coursework implementation, not a production-grade anonymization system.
+
+Known limitations include:
+
+- NER predictions and regular expressions may produce false positives or miss sensitive information.
+- DOCX text boxes, hyperlink XML not exposed as ordinary runs, tracked changes, embedded objects, comments, and unusual Word field structures are not comprehensively supported.
+- PDF extraction and OCR are not currently implemented.
+- The initial target domain is English legal documents.
+
+Roadmap
+
+1. Build an annotated legal-document evaluation dataset.
+2. Benchmark NER performance using Precision, Recall, and F1-score.
+3. Compare NuNER Zero with a compact pre-trained BERT-based NER model.
+4. Improve DOCX support for hyperlinks, text boxes, and complex Word structures.
+5. Introduce PDF text extraction as an additional input format.
+6. Publish a technical evaluation report based on measured results.
+
+Project Status
+
+<em>Initial implementation – under development.</em>
+
+Future releases will focus on improving detection accuracy, document compatibility, and evaluation reliability.
+
+Author
+
+Wael Mahfoud
+
+Software Engineer | Information Engineering
+
+- GitHub: "Wael-Mahfoud" (https://github.com/Wael-Mahfoud)
