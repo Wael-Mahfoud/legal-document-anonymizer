@@ -45,44 +45,6 @@ User Interface| Streamlit
 Containerization| Docker & Docker Compose
 Testing| pytest
 
-System Architecture
-
-The application follows a modular processing pipeline:
-
-Document Upload
-      |
-      v
-Input Validation
-      |
-      v
-Text Extraction
-      |
-      v
-Text Chunking with Offsets
-      |
-      +----------------------+
-      |                      |
-      v                      v
-NuNER Zero / GLiNER     Regex Detection
-PER / ORG / LOC         EMAIL / PHONE
-                        DATE / ID
-      |                      |
-      +----------+-----------+
-                 |
-                 v
-       Overlapping Span Resolution
-                 |
-                 v
-       Anonymization Policy
-                 |
-                 v
-       Document Reconstruction
-                 |
-                 v
-          Output Validation
-                 |
-                 v
-       Anonymized Document
 
 Anonymization Strategies
 
