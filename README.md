@@ -17,6 +17,9 @@ The application provides configurable anonymization policies and reconstructs pr
 ### Detection Settings
 ![Detection Settings](docs/images/original-document.png)
 
+## System Architecture
+
+![System Architecture](docs/images/architecture.png)
 Key Features
 
 - Document Support: Upload and process TXT and DOCX files, with a 20 MiB file-size limit.
