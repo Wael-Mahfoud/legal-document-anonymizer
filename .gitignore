@@ -1,0 +1,59 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.so
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+venv/
+.venv/
+env/
+obfuscation_env/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+credentials/
+
+# Hugging Face and ML caches
+.cache/
+huggingface/
+hub/
+models/
+*.safetensors
+*.pt
+*.pth
+*.bin
+
+# Runtime and temporary files
+tmp/
+temp/
+uploads/
+outputs/
+output/
+downloads/
+*.log
+
+# Streamlit
+.streamlit/secrets.toml
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Docker and test artifacts
+*.pid
+.coverage
+htmlcov/

@@ -1,0 +1,9 @@
+﻿,Type,Original value,Replacement,Detected by,Score
+0,Person,John,*****,ner,0.999
+1,Person,Smith,*****,ner,0.999
+2,Person,Employee,*****,ner,0.949
+3,Person,john,*****,ner,0.703
+4,Person,smith,*****,ner,0.725
+5,Person,parties,*****,ner,0.564
+6,Person,John,*****,ner,0.998
+7,Person,Smith,*****,ner,0.999
