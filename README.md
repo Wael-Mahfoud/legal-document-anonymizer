@@ -8,18 +8,18 @@ The application provides configurable anonymization policies and reconstructs pr
 
 ## System Architecture
 
-![System Architecture](docs/images/architecture.png)
+![System Architecture](docs/architecture.png)
 
 ## Screenshots
 
 ### Application Interface
-![Application Interface](docs/images/app-interface.png)
+![Application Interface](docs/app-interface.png)
 
 ### Anonymization Result
-![Anonymization Result](docs/images/anonymization-result.png)
+![Anonymization Result](docs/anonymization-result.png)
 
 ### Detection Settings
-![Detection Settings](docs/images/original-document.png)
+![Detection Settings](docs/original-document.png)
 
 
 Key Features
