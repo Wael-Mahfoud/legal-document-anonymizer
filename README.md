@@ -8,7 +8,7 @@ The application provides configurable anonymization policies and reconstructs pr
 
 ## System Architecture
 
-![System Architecture](docs/architecture.png)
+![System Architecture](docs/architecture.jpg)
 
 ## Screenshots
 
@@ -18,8 +18,8 @@ The application provides configurable anonymization policies and reconstructs pr
 ### Anonymization Result
 ![Anonymization Result](docs/anonymization-result.png)
 
-### Detection Settings
-![Detection Settings](docs/original-document.png)
+### Original Document
+![Original Document](docs/original-document.png)
 
 
 Key Features
